@@ -35,7 +35,7 @@ The ASP.NET Core 2.0 web app, **TechTalkWebApp** enables a user to:
 
 On subsequent returns to the web app, the user's session is persisted locally in a cookie and reauthentication is not required.
 
-![TechTalk WebApp](./Readme/TechTalk-webApp.png)
+![TechTalk WebApp](./Readme/techtalk-webApp.png)
 
 ## Running the sample
 
