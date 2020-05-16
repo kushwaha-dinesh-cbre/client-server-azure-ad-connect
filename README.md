@@ -233,13 +233,13 @@ Unlike ASP.NET, ASP.NET Core 2.0 uses an implicit flow by default. Without overr
 
 ### How to change the app URL
 If you are using Visual Studio 2017
-1. Edit the TechTalkService's properties (right click on `TechTalkService.csproj`, and choose **Properties**)
+1. Edit the TechTalkService's properties (right click on `azure-ad-connect-web-api.csproj`, and choose **Properties**)
 1. In the Debug tab:
     1. Check the **Launch browser** field to `https://localhost:44351/api/TechTalk`
     1. Change the **App URL** field to be `https://localhost:44351` as this is the URL registered in the Azure AD application representing our Web API.
     1. Check the **Enable SSL** field
 
-The same kind of modifications can be made on the `TechTalkWebApp.csproj` project.
+The same kind of modifications can be made on the `azure-ad-connect-web-app.csproj` project.
 
 > [!WARNING]
 > Ensure that all of the app registration steps reflect any changes made to the URLs, or the sample won't function.
