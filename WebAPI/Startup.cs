@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace AzureADConnectWebAPI
 {
@@ -27,21 +27,28 @@ namespace AzureADConnectWebAPI
             })
             .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
 
-            
+           // services.AddAuthentication(sharedOptions =>
+           // {
+           //     sharedOptions.DefaultScheme = AzureADDefaults.BearerAuthenticationScheme;
+           // })
+           //.AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
+
+            string corsDomains = "http://localhost:4200,https://localhost:4200,http://localhost:44377/,https://localhost:44377/";
+            string[] domains = corsDomains.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            services.AddCors(o => o.AddPolicy("AppCORSPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials()
+                       .WithOrigins(domains);
+            }));
+
+            //services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme).
+            //    AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
 
             services.AddMvc();
-            services.AddCors(opt => opt.AddPolicy("AllowAllCorsPolicy",
-                                          bldr => bldr.AllowAnyOrigin()
-                                                      .AllowAnyHeader()
-                                                      .AllowAnyMethod()
-                                                      .AllowCredentials()
-                          ));
-
-            //employ the Cors Policy globally.
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllCorsPolicy"));
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +59,7 @@ namespace AzureADConnectWebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AppCORSPolicy");
             app.UseAuthentication();
             app.UseMvc();
         }
